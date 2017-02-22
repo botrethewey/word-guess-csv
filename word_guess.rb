@@ -1,17 +1,21 @@
+require 'csv'
 class WordGuess
   def initialize(debug = false)
     # are we in debug mode?
     @debug = debug
 
     # possible words, selected at random
-    @words = {
-      "e" => %w(dog cat bug hat cap lit kin fan fin fun tan ten tin ton),
-      "m" => %w(plain claim brine crime alive bride skine drive slime stein jumpy),
-      "h" => %w(
-          machiavellian prestidigitation plenipotentiary quattuordecillion
-          magnanimous unencumbered bioluminescent circumlocution
-        )
-    }
+    #%w(happy sad) is like ("happy", "sad")
+    # @words = {
+    #   "e" => %w(dog cat bug hat cap lit kin fan fin fun tan ten tin ton),
+    #   "m" => %w(plain claim brine crime alive bride skine drive slime stein jumpy),
+    #   "h" => %w(
+    #       machiavellian prestidigitation plenipotentiary quattuordecillion
+    #       magnanimous unencumbered bioluminescent circumlocution
+    #     )
+    # }
+
+    @words = sort_words
 
     # players attempts allowed by difficulty
     @tries = {
@@ -40,6 +44,26 @@ class WordGuess
     # start the first turn
     play_turn
   end
+
+  def sort_words
+    new_words = {}
+    # my work below
+    # CSV.open("words.csv", 'r').each do |line|
+    #   temp_array = []
+    #   mode = line[0]
+    #
+    #   (1...line.length).each do |index|
+    #     temp_array << line[index]
+    #   end #end of do
+    #   new_words[mode] = temp_array
+    # end # end of csv.each do
+
+    # class work below
+    CSV.read("words.csv").each do |line|
+      new_words[ line[0] ] = line[1..-1]
+    end
+    return new_words
+  end # end of method
 
   def play_turn
     # a turn begins by asking a player for their guess
